@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript OOP Tutorial - Dark Edition</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Fira Code', 'Courier New', monospace;
+            line-height: 1.7;
+            color: #e8e8e8;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 25px;
+            display: grid;
+            gap: 25px;
+        }
+
+        .header {
+            text-align: center;
+            color: #00ff88;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, #00ff88, #00d4ff);
+            border-radius: 2px;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            margin: 30px 0 15px 0;
+            text-shadow: 0 0 20px #00ff88;
+            background: linear-gradient(45deg, #00ff88, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #a0a0a0;
+            font-weight: 300;
+        }
+
+        .sections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+            gap: 30px;
+        }
+
+        .section {
+            background: rgba(30, 30, 50, 0.8);
+            border: 1px solid #333;
+            margin: 15px 0;
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #00ff88);
+            background-size: 300% 100%;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .section h2 {
+            color: #00ff88;
+            font-size: 2.2rem;
+            margin-bottom: 25px;
+            font-weight: 600;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .section h2::before {
+            content: '▶';
+            position: absolute;
+            left: 0;
+            color: #00d4ff;
+            font-size: 1.5rem;
+        }
+
+        .section h3 {
+            color: #00d4ff;
+            font-size: 1.6rem;
+            margin: 25px 0 18px 0;
+            border-left: 4px solid #00d4ff;
+            padding-left: 15px;
+        }
+
+        .code-block {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 15px;
+            overflow-x: auto;
+            position: relative;
+            color: #f8f8f2;
+        }
+
+        .code-block::before {
+            content: '{ JS }';
+            position: absolute;
+            top: 8px;
+            right: 15px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: #1a1a1a;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        /* Syntax highlighting */
+        .code-block .keyword { color: #ff79c6; }
+        .code-block .string { color: #50fa7b; }
+        .code-block .comment { color: #6272a4; }
+        .code-block .function { color: #8be9fd; }
+
+        .output {
+            background: linear-gradient(135deg, #1a4a3a, #2a5a4a);
+            border: 1px solid #00ff88;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            color: #00ff88;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+        }
+
+        .output::before {
+            content: '📊 Output:';
+            font-weight: bold;
+            color: #00ff88;
+            display: block;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .button {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: #1a1a1a;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 12px 8px;
+            transition: all 0.4s ease;
+            box-shadow: 
+                0 6px 20px rgba(255, 107, 107, 0.3),
+                0 0 20px rgba(78, 205, 196, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 
+                0 10px 30px rgba(255, 107, 107, 0.4),
+                0 0 30px rgba(78, 205, 196, 0.3);
+        }
+
+        .button:active {
+            transform: translateY(-1px) scale(1.02);
+        }
+
+        .canvas-container {
+            text-align: center;
+            margin: 25px 0;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            border: 1px solid #333;
+        }
+
+        canvas {
+            border: 2px solid #00ff88;
+            border-radius: 15px;
+            background: #000;
+            box-shadow: 
+                0 0 30px rgba(0, 255, 136, 0.3),
+                inset 0 0 50px rgba(0, 255, 136, 0.1);
+        }
+
+        svg {
+            border: 2px solid #00d4ff;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            box-shadow: 
+                0 0 30px rgba(0, 212, 255, 0.3),
+                inset 0 0 50px rgba(0, 212, 255, 0.1);
+        }
+
+        .example-box {
+            background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+            color: #1a1a1a;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            font-weight: 500;
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+        }
+
+        .rule {
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(255, 152, 0, 0.1));
+            border: 1px solid #ffc107;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 5px solid #ffc107;
+            box-shadow: 0 0 15px rgba(255, 193, 7, 0.2);
+        }
+
+        .rule h4 {
+            color: #ffc107;
+            margin-bottom: 12px;
+            font-size: 1.3rem;
+        }
+
+        .rule ol {
+            color: #e8e8e8;
+            padding-left: 20px;
+        }
+
+        .rule li {
+            margin: 8px 0;
+            padding: 5px 0;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a1a2e;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border-radius: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, #4ecdc4, #ff6b6b);
+        }
+
+        /* Animation for sections */
+        @keyframes slideInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .section {
+            animation: slideInFromLeft 0.8s ease-out forwards;
+        }
+
+        .section:nth-child(even) {
+            animation-delay: 0.2s;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .sections-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            .section {
+                padding: 25px;
+            }
+        }
+
+        /* Glowing effect for important elements */
+        .glow {
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+            }
+            to {
+                box-shadow: 0 0 30px rgba(0, 255, 136, 0.6);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚡ JavaScript OOP Masterclass</h1>
+            <p>Advanced Object-Oriented Programming in het Dark Side 🌙</p>
+        </div>
+
+        <div class="sections-grid">
+            <!-- Section 1: 'this' keyword -->
+            <div class="section">
+                <h2>🎯 Het 'this' Keyword</h2>
+                <p>In JavaScript wordt 'this' dynamisch bepaald door de <strong>calling context</strong>.</p>
+                
+                <div class="rule">
+                    <h4>⚡ De 4 Golden Rules:</h4>
+                    <ol>
+                        <li><strong>Method Invocation:</strong> obj.method() → this = obj</li>
+                        <li><strong>Function Invocation:</strong> function() → this = global object</li>
+                        <li><strong>Constructor Invocation:</strong> new Function() → this = nieuw instance</li>
+                        <li><strong>Arrow Functions:</strong> Lexical 'this' van parent scope</li>
+                    </ol>
+                </div>
+
+                <h3>💡 Live Examples:</h3>
+                
+                <div class="code-block">
+const gameObject = {
+    score: 100,
+    bonus: 50,
+    <span class="function">calculateTotal</span>: function() {
+        return this.score + this.bonus; <span class="comment">// this = gameObject</span>
+    },
+    <span class="function">calculateArrow</span>: () => {
+        return this.score + this.bonus; <span class="comment">// this = window!</span>
+    }
+};
+
+<span class="function">console.log</span>(<span class="string">'Method call:'</span>, gameObject.calculateTotal()); <span class="comment">// 150</span>
+<span class="function">console.log</span>(<span class="string">'Arrow function:'</span>, gameObject.calculateArrow()); <span class="comment">// NaN</span>
+                </div>
+
+                <button class="button" onclick="demonstrateThis()">🚀 Test 'this' Magic</button>
+                <div id="thisOutput" class="output" style="display:none;"></div>
+            </div>
+
+            <!-- Section 2: Object Creation -->
+            <div class="section">
+                <h2>🏗️ Object Creation Patterns</h2>
+                
+                <h3>Pattern 1: Object Literals</h3>
+                <div class="code-block">
+const <span class="keyword">hero</span> = {
+    name: <span class="string">"SuperCoder"</span>,
+    level: 42,
+    power: <span class="string">"JavaScript Mastery"</span>,
+    <span class="function">attack</span>() {
+        return `${this.name} uses ${this.power}!`;
+    }
+};
+                </div>
+
+                <h3>Pattern 2: Constructor Functions</h3>
+                <div class="code-block">
+function <span class="function">Hero</span>(name, level) {
+    this.name = name;
+    this.level = level;
+    this.power = <span class="string">"Code Magic"</span>;
+}
+
+<span class="keyword">Hero.prototype.attack</span> = function() {
+    return `${this.name} casts level ${this.level} spell!`;
+};
+
+const <span class="keyword">warrior</span> = new Hero(<span class="string">'CodeWarrior'</span>, 25);
+                </div>
+
+                <h3>Pattern 3: Object.create()</h3>
+                <div class="code-block">
+const <span class="keyword">heroPrototype</span> = {
+    <span class="function">attack</span>() {
+        return `${this.name} unleashes ${this.power}!`;
+    }
+};
+
+const <span class="keyword">mage</span> = Object.create(heroPrototype);
+mage.name = <span class="string">'CodeMage'</span>;
+mage.power = <span class="string">'Algorithm Storm'</span>;
+                </div>
+
+                <h3>Pattern 4: ES6 Classes</h3>
+                <div class="code-block">
+class <span class="keyword">Hero</span> {
+    <span class="function">constructor</span>(name, level, power) {
+        this.name = name;
+        this.level = level;
+        this.power = power;
+    }
+    
+    <span class="function">attack</span>() {
+        return `${this.name} (Lv.${this.level}) uses ${this.power}!`;
+    }
+    
+    <span class="function">levelUp</span>() {
+        this.level++;
+        return `${this.name} leveled up to ${this.level}!`;
+    }
+}
+                </div>
+
+                <button class="button" onclick="demonstrateObjectCreation()">⚡ Create Objects</button>
+                <div id="objectOutput" class="output" style="display:none;"></div>
+            </div>
+
+            <!-- Section 3: Inheritance -->
+            <div class="section">
+                <h2>🧬 Inheritance & Polymorphism</h2>
+                
+                <h3>🔗 Prototype Chain Inheritance</h3>
+                <div class="code-block">
+<span class="comment">// Base class</span>
+function <span class="function">Creature</span>(name) {
+    this.name = name;
+    this.health = 100;
+}
+
+<span class="keyword">Creature.prototype.speak</span> = function() {
+    return `${this.name} makes a sound`;
+};
+
+<span class="comment">// Derived class</span>
+function <span class="function">Dragon</span>(name, element) {
+    <span class="keyword">Creature.call</span>(this, name);
+    this.element = element;
+}
+
+<span class="comment">// Setup inheritance</span>
+<span class="keyword">Dragon.prototype</span> = Object.create(Creature.prototype);
+<span class="keyword">Dragon.prototype.constructor</span> = Dragon;
+
+<span class="keyword">Dragon.prototype.breathe</span> = function() {
+    return `${this.name} breathes ${this.element} fire! 🔥`;
+};
+                </div>
+
+                <h3>🎓 ES6 Class Inheritance</h3>
+                <div class="code-block">
+class <span class="keyword">Creature</span> {
+    <span class="function">constructor</span>(name, health = 100) {
+        this.name = name;
+        this.health = health;
+    }
+    
+    <span class="function">speak</span>() {
+        return `${this.name} communicates mysteriously`;
+    }
+    
+    <span class="function">takeDamage</span>(damage) {
+        this.health -= damage;
+        return `${this.name} takes ${damage} damage! HP: ${this.health}`;
+    }
+}
+
+class <span class="keyword">Dragon</span> extends Creature {
+    <span class="function">constructor</span>(name, element, power) {
+        <span class="keyword">super</span>(name, 200); <span class="comment">// Call parent constructor</span>
+        this.element = element;
+        this.power = power;
+    }
+    
+    <span class="function">speak</span>() {
+        return `${this.name} roars with ${this.element} energy! 🐲`;
+    }
+    
+    <span class="function">breathe</span>() {
+        return `${this.name} unleashes ${this.element} breath dealing ${this.power} damage!`;
+    }
+}
+                </div>
+
+                <button class="button" onclick="demonstrateInheritance()">🐲 Summon Creatures</button>
+                <div id="inheritanceOutput" class="output" style="display:none;"></div>
+            </div>
+
+            <!-- Section 4: Komeet Assignment -->
+            <div class="section">
+                <h2>🌌 Space Comet Simulator</h2>
+                <p>Bouw een interactieve komeet simulator voor je space game!</p>
+
+                <h3>🛸 Method 1: Object.create()</h3>
+                <div class="code-block">
+const <span class="keyword">cosmicProto</span> = {
+    <span class="function">randomValue</span>: (max) => Math.round(Math.random() * max),
+    <span class="function">getSpeed</span>() {
+        return Math.sqrt(this.vector[0]**2 + this.vector[1]**2);
+    }
+};
+
+function <span class="function">createComet</span>() {
+    const comet = Object.create(cosmicProto);
+    comet.diameter = cosmicProto.randomValue(80) + 30;
+    comet.velocity = cosmicProto.randomValue(150) + 20;
+    comet.x = cosmicProto.randomValue(400);
+    comet.y = cosmicProto.randomValue(300);
+    comet.vector = [
+        cosmicProto.randomValue(8) - 4, 
+        cosmicProto.randomValue(8) - 4
+    ];
+    return comet;
+}
+                </div>
+
+                <h3>🏗️ Method 2: Constructor Pattern</h3>
+                <div class="code-block">
+function <span class="function">CometConstructor</span>() {
+    this.diameter = Math.round(Math.random() * 80) + 30;
+    this.velocity = Math.round(Math.random() * 150) + 20;
+    this.x = Math.round(Math.random() * 400);
+    this.y = Math.round(Math.random() * 300);
+    this.vector = [
+        Math.round(Math.random() * 8) - 4,
+        Math.round(Math.random() * 8) - 4
+    ];
+    this.color = this.<span class="function">randomColor</span>();
+}
+
+<span class="keyword">CometConstructor.prototype.randomColor</span> = function() {
+    const colors = [<span class="string">'#FFD700'</span>, <span class="string">'#FF6B47'</span>, <span class="string">'#4ECDC4'</span>, <span class="string">'#FF8E53'</span>];
+    return colors[Math.floor(Math.random() * colors.length)];
+};
+                </div>
+
+                <h3>⚡ Method 3: ES6 Class</h3>
+                <div class="code-block">
+class <span class="keyword">SpaceComet</span> {
+    <span class="function">constructor</span>() {
+        this.diameter = Math.round(Math.random() * 80) + 30;
+        this.velocity = Math.round(Math.random() * 150) + 20;
+        this.x = Math.round(Math.random() * 400);
+        this.y = Math.round(Math.random() * 300);
+        this.vector = [
+            Math.round(Math.random() * 8) - 4,
+            Math.round(Math.random() * 8) - 4
+        ];
+        this.color = this.<span class="function">generateColor</span>();
+        this.trail = [];
+    }
+    
+    <span class="function">generateColor</span>() {
+        const hue = Math.random() * 60 + 15; <span class="comment">// Orange to yellow spectrum</span>
+        return `hsl(${hue}, 100%, 60%)`;
+    }
+    
+    <span class="function">move</span>() {
+        <span class="comment">// Add current position to trail</span>
+        this.trail.unshift({x: this.x, y: this.y});
+        if (this.trail.length > 5) this.trail.pop();
+        
+        this.x += this.vector[0];
+        this.y += this.vector[1];
+        
+        <span class="comment">// Wrap around screen edges</span>
+        if (this.x < -this.diameter) this.x = 500 + this.diameter;
+        if (this.x > 500 + this.diameter) this.x = -this.diameter;
+        if (this.y < -this.diameter) this.y = 400 + this.diameter;
+        if (this.y > 400 + this.diameter) this.y = -this.diameter;
+    }
+}
+                </div>
+
+                <div class="canvas-container glow">
+                    <canvas id="komeetCanvas" width="500" height="400"></canvas>
+                    <br>
+                    <button class="button" onclick="createKometen()">🌠 Spawn Comets</button>
+                    <button class="button" onclick="startAnimation()">▶️ Start Simulation</button>
+                    <button class="button" onclick="stopAnimation()">⏸️ Pause</button>
+                </div>
+            </div>
+
+            <!-- Section 5: Bal Assignment -->
+            <div class="section">
+                <h2>⚽ Interactive Ball Playground</h2>
+                <p>Maak een interactieve bal simulator met SVG graphics!</p>
+
+                <div class="code-block">
+class <span class="keyword">InteractiveBall</span> {
+    <span class="function">constructor</span>(diameter, x, y) {
+        this.diameter = diameter;
+        this.x = x;
+        this.y = y;
+        this.color = this.<span class="function">generateNeonColor</span>();
+        this.glowIntensity = Math.random() * 0.5 + 0.5;
+    }
+    
+    <span class="function">generateNeonColor</span>() {
+        const neonColors = [
+            <span class="string">'#FF6B6B'</span>, <span class="string">'#4ECDC4'</span>, <span class="string">'#45B7D1'</span>, 
+            <span class="string">'#00FF88'</span>, <span class="string">'#FF8E53'</span>, <span class="string">'#A8E6CF'</span>
+        ];
+        return neonColors[Math.floor(Math.random() * neonColors.length)];
+    }
+    
+    <span class="function">draw</span>(svgElement) {
+        <span class="comment">// Creates advanced SVG with glow effects</span>
+        const circle = document.createElementNS(<span class="string">"http://www.w3.org/2000/svg"</span>, <span class="string">"circle"</span>);
+        <span class="comment">// ... implementation with neon effects ...</span>
+        return circle;
+    }
+}
+                </div>
+
+                <div class="canvas-container">
+                    <svg id="balSvg" width="500" height="300">
+                        <defs>
+                            <filter id="neonGlow">
+                                <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                                <feMerge> 
+                                    <feMergeNode in="coloredBlur"/>
+                                    <feMergeNode in="SourceGraphic"/>
+                                </feMerge>
+                            </filter>
+                            <pattern id="gridPattern" width="50" height="50" patternUnits="userSpaceOnUse">
+                                <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#00ff88" stroke-width="0.5" opacity="0.2"/>
+                            </pattern>
+                        </defs>
+                        <rect width="100%" height="100%" fill="url(#gridPattern)" />
+                    </svg>
+                    <br>
+                    <button class="button" onclick="createBallen()">⚡ Generate Balls</button>
+                    <button class="button" onclick="clearBallen()">🗑️ Clear All</button>
+                    <button class="button" onclick="showBalInfo()">📊 Show Stats</button>
+                </div>
+                
+                <div id="balOutput" class="output" style="display:none;"></div>
+            </div>
+
+            <!-- Section 6: Advanced Concepts -->
+            <div class="section">
+                <h2>🧠 Advanced JavaScript Wizardry</h2>
+                
+                <h3>🔮 Function Context Manipulation</h3>
+                <div class="example-box">
+                    <p><strong>Pro Tip:</strong> Met call(), apply(), en bind() kun je de 'this' context volledig controleren - een krachtige feature voor advanced patterns!</p>
+                </div>
+
+                <div class="code-block">
+function <span class="function">spellCaster</span>(spell, power) {
+    return `${this.name} casts ${spell} with ${power} power! ⚡`;
+}
+
+const <span class="keyword">wizard</span> = { name: <span class="string">'Gandalf'</span> };
+const <span class="keyword">witch</span> = { name: <span class="string">'Hermione'</span> };
+
+<span class="comment">// call() - arguments individually</span>
+<span class="function">console.log</span>(spellCaster.<span class="function">call</span>(wizard, <span class="string">'Fireball'</span>, <span class="string">'Maximum'</span>));
+
+<span class="comment">// apply() - arguments as array</span>
+<span class="function">console.log</span>(spellCaster.<span class="function">apply</span>(witch, [<span class="string">'Levitation'</span>, <span class="string">'Moderate'</span>]));
+
+<span class="comment">// bind() - create new function with fixed context</span>
+const <span class="keyword">wizardSpell</span> = spellCaster.<span class="function">bind</span>(wizard);
+<span class="function">console.log</span>(wizardSpell(<span class="string">'Lightning Bolt'</span>, <span class="string">'Epic'</span>));
+                </div>
+
+                <button class="button" onclick="demonstrateAdvanced()">🎭 Master Context Magic</button>
+                <div id="advancedOutput" class="output" style="display:none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables for animations and objects
+        let kometen = [];
+        let animationId = null;
+        let canvas = null;
+        let ctx = null;
+        let ballen = [];
+
+        // Initialize canvas when page loads
+        window.onload = function() {
+            canvas = document.getElementById('komeetCanvas');
+            ctx = canvas.getContext('2d');
+            setupCanvasBackground();
+        };
+
+        // Enhanced Ball class with neon effects
+        class InteractiveBall {
+            constructor(diameter, x, y) {
+                this.diameter = diameter;
+                this.x = x;
+                this.y = y;
+                this.color = this.generateNeonColor();
+                this.glowIntensity = Math.random() * 0.5 + 0.5;
+                this.pulseSpeed = Math.random() * 0.02 + 0.01;
+                this.pulseOffset = Math.random() * Math.PI * 2;
+            }
+            
+            generateNeonColor() {
+                const neonColors = [
+                    '#FF6B6B', '#4ECDC4', '#45B7D1', 
+                    '#00FF88', '#FF8E53', '#A8E6CF',
+                    '#FF9FF3', '#54A0FF', '#5F27CD'
+                ];
+                return neonColors[Math.floor(Math.random() * neonColors.length)];
+            }
+            
+            draw(svgElement) {
+                // Create circle element
+                const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                circle.setAttribute("cx", this.x);
+                circle.setAttribute("cy", this.y);
+                circle.setAttribute("r", this.diameter / 2);
+                circle.setAttribute("fill", this.color);
+                circle.setAttribute("stroke", "#fff");
+                circle.setAttribute("stroke-width", "1");
+                circle.setAttribute("filter", "url(#neonGlow)");
+                circle.setAttribute("class", "interactive-ball");
+                circle.setAttribute("style", `
+                    transition: all 0.3s ease; 
+                    cursor: pointer;
+                    opacity: ${this.glowIntensity};
+                `);
+                
+                // Advanced hover effects
+                circle.addEventListener("mouseover", () => {
+                    circle.setAttribute("transform", `scale(1.2)`);
+                    circle.setAttribute("transform-origin", `${this.x} ${this.y}`);
+                    circle.setAttribute("stroke-width", "3");
+                    circle.setAttribute("stroke", this.color);
+                });
+                
+                circle.addEventListener("mouseout", () => {
+                    circle.setAttribute("transform", "scale(1)");
+                    circle.setAttribute("stroke-width", "1");
+                    circle.setAttribute("stroke", "#fff");
+                });
+                
+                // Click animation with ripple effect
+                circle.addEventListener("click", () => {
+                    this.createRippleEffect(svgElement);
+                    
+                    // Bounce animation
+                    circle.setAttribute("transform", `scale(0.7)`);
+                    setTimeout(() => {
+                        circle.setAttribute("transform", "scale(1.3)");
+                        setTimeout(() => {
+                            circle.setAttribute("transform", "scale(1)");
+                        }, 150);
+                    }, 100);
+                });
+                
+                svgElement.appendChild(circle);
+                return circle;
+            }
+            
+            createRippleEffect(svgElement) {
+                const ripple = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                ripple.setAttribute("cx", this.x);
+                ripple.setAttribute("cy", this.y);
+                ripple.setAttribute("r", this.diameter / 2);
+                ripple.setAttribute("fill", "none");
+                ripple.setAttribute("stroke", this.color);
+                ripple.setAttribute("stroke-width", "2");
+                ripple.setAttribute("opacity", "0.8");
+                
+                svgElement.appendChild(ripple);
+                
+                // Animate ripple
+                let scale = 1;
+                let opacity = 0.8;
+                const animate = () => {
+                    scale += 0.1;
+                    opacity -= 0.05;
+                    
+                    ripple.setAttribute("transform", `scale(${scale})`);
+                    ripple.setAttribute("transform-origin", `${this.x} ${this.y}`);
+                    ripple.setAttribute("opacity", opacity);
+                    
+                    if (opacity > 0) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        svgElement.removeChild(ripple);
+                    }
+                };
+                requestAnimationFrame(animate);
+            }
+            
+            getInfo() {
+                return `Neon Ball: ${this.diameter}px @ (${this.x}, ${this.y}) | Color: ${this.color}`;
+            }
+        }
+
+        // Enhanced Space Comet class
+        class SpaceComet {
+            constructor() {
+                this.diameter = Math.round(Math.random() * 80) + 30;
+                this.velocity = Math.round(Math.random() * 150) + 20;
+                this.x = Math.round(Math.random() * 400);
+                this.y = Math.round(Math.random() * 300);
+                this.vector = [
+                    Math.round(Math.random() * 8) - 4,
+                    Math.round(Math.random() * 8) - 4
+                ];
+                this.color = this.generateColor();
+                this.trail = [];
+                this.sparkles = [];
+            }
+            
+            generateColor() {
+                const hue = Math.random() * 60 + 15; // Orange to yellow spectrum
+                const saturation = 80 + Math.random() * 20;
+                const lightness = 50 + Math.random() * 30;
+                return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+            }
+            
+            move() {
+                // Add current position to trail
+                this.trail.unshift({x: this.x, y: this.y});
+                if (this.trail.length > 8) this.trail.pop();
+                
+                // Add sparkles occasionally
+                if (Math.random() < 0.3) {
+                    this.sparkles.push({
+                        x: this.x + (Math.random() - 0.5) * this.diameter,
+                        y: this.y + (Math.random() - 0.5) * this.diameter,
+                        life: 20
+                    });
+                }
+                
+                // Update sparkles
+                this.sparkles = this.sparkles.filter(sparkle => {
+                    sparkle.life--;
+                    return sparkle.life > 0;
+                });
+                
+                this.x += this.vector[0];
+                this.y += this.vector[1];
+                
+                // Wrap around screen edges
+                if (this.x < -this.diameter) this.x = 500 + this.diameter;
+                if (this.x > 500 + this.diameter) this.x = -this.diameter;
+                if (this.y < -this.diameter) this.y = 400 + this.diameter;
+                if (this.y > 400 + this.diameter) this.y = -this.diameter;
+            }
+            
+            draw(ctx) {
+                // Draw trail
+                this.trail.forEach((point, index) => {
+                    const alpha = (this.trail.length - index) / this.trail.length * 0.5;
+                    const size = (this.trail.length - index) / this.trail.length * this.diameter * 0.3;
+                    
+                    ctx.globalAlpha = alpha;
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    ctx.arc(point.x, point.y, size, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                
+                ctx.globalAlpha = 1;
+                
+                // Main comet body with gradient
+                const gradient = ctx.createRadialGradient(
+                    this.x - this.diameter * 0.3, this.y - this.diameter * 0.3, 0,
+                    this.x, this.y, this.diameter / 2
+                );
+                gradient.addColorStop(0, '#FFFFFF');
+                gradient.addColorStop(0.3, this.color);
+                gradient.addColorStop(1, '#FF4500');
+                
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.diameter / 2, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Glow effect
+                ctx.shadowColor = this.color;
+                ctx.shadowBlur = 15;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.diameter / 2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+                
+                // Draw sparkles
+                this.sparkles.forEach(sparkle => {
+                    const alpha = sparkle.life / 20;
+                    ctx.globalAlpha = alpha;
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.beginPath();
+                    ctx.arc(sparkle.x, sparkle.y, 1.5, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                
+                ctx.globalAlpha = 1;
+            }
+        }
+
+        function setupCanvasBackground() {
+            // Create starfield background
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Add some permanent stars
+            ctx.fillStyle = '#FFF';
+            for (let i = 0; i < 100; i++) {
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                const size = Math.random() * 1.5;
+                ctx.beginPath();
+                ctx.arc(x, y, size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        // Demonstrate 'this' keyword with modern examples
+        function demonstrateThis() {
+            const output = document.getElementById('thisOutput');
+            let result = '';
+
+            // Gaming context example
+            const gameObj = {
+                score: 1000,
+                multiplier: 2.5,
+                calculateScore: function() {
+                    return this.score * this.multiplier;
+                },
+                calculateArrow: () => {
+                    return this.score * this.multiplier; // this = window
+                }
+            };
+
+            result += `🎮 Game Object Examples:\n`;
+            result += `Method call: ${gameObj.calculateScore()} points\n`;
+            result += `Arrow function: ${gameObj.calculateArrow()} (undefined - this = window)\n\n`;
+
+            // Constructor example
+            function Player(name, level) {
+                this.name = name;
+                this.level = level;
+                this.getStatus = function() {
+                    return `${this.name} is level ${this.level}`;
+                };
+            }
+            const player = new Player('CodeMaster', 99);
+            result += `🏆 Constructor: ${player.getStatus()}\n\n`;
+
+            // Call/Apply/Bind examples
+            function announce(action, result) {
+                return `${this.name} ${action} and ${result}!`;
+            }
+            const hero = { name: 'SuperDev' };
+            result += `⚡ call(): ${announce.call(hero, 'codes', 'succeeds')}\n`;
+            result += `⚡ apply(): ${announce.apply(hero, ['debugs', 'fixes everything'])}\n`;
+            
+            const boundAnnounce = announce.bind(hero);
+            result += `⚡ bind(): ${boundAnnounce('deploys', 'changes the world')}\n`;
+
+            output.textContent = result;
+            output.style.display = 'block';
+        }
+
+        // Demonstrate object creation with gaming theme
+        function demonstrateObjectCreation() {
+            const output = document.getElementById('objectOutput');
+            let result = '';
+
+            result += `🚀 Object Creation Showcase:\n\n`;
+
+            // Object literal
+            const weapon = {
+                name: "Excalibur",
+                damage: 100,
+                attack() { return `${this.name} deals ${this.damage} damage!`; }
+            };
+            result += `⚔️ Object Literal: ${weapon.attack()}\n`;
+
+            // Constructor function
+            function Weapon(name, damage) {
+                this.name = name;
+                this.damage = damage;
+                this.attack = function() { return `${this.name} strikes for ${this.damage}!`; };
+            }
+            const sword = new Weapon('Dragon Blade', 150);
+            result += `🗡️ Constructor: ${sword.attack()}\n`;
+
+            // Object.create
+            const weaponProto = {
+                attack() { return `${this.name} unleashes ${this.damage} power!`; }
+            };
+            const staff = Object.create(weaponProto);
+            staff.name = 'Staff of Wisdom';
+            staff.damage = 200;
+            result += `🏹 Object.create: ${staff.attack()}\n`;
+
+            // ES6 Class
+            class MagicWeapon {
+                constructor(name, damage, element) {
+                    this.name = name;
+                    this.damage = damage;
+                    this.element = element;
+                }
+                attack() {
+                    return `${this.name} casts ${this.element} for ${this.damage} damage!`;
+                }
+            }
+            const wand = new MagicWeapon('Phoenix Wand', 250, 'Fire Magic');
+            result += `✨ ES6 Class: ${wand.attack()}\n`;
+
+            output.textContent = result;
+            output.style.display = 'block';
+        }
+
+        // Demonstrate inheritance with fantasy theme
+        function demonstrateInheritance() {
+            const output = document.getElementById('inheritanceOutput');
+            let result = '';
+
+            result += `🧬 Inheritance Magic:\n\n`;
+
+            // ES6 Class inheritance
+            class Creature {
+                constructor(name, health = 100) {
+                    this.name = name;
+                    this.health = health;
+                }
+                speak() {
+                    return `${this.name} communicates mysteriously`;
+                }
+                takeDamage(damage) {
+                    this.health -= damage;
+                    return `${this.name} takes ${damage} damage! HP: ${this.health}`;
+                }
+            }
+
+            class Dragon extends Creature {
+                constructor(name, element, power) {
+                    super(name, 300);
+                    this.element = element;
+                    this.power = power;
+                }
+                speak() {
+                    return `🐲 ${this.name} roars with ${this.element} fury!`;
+                }
+                breathe() {
+                    return `${this.name} breathes ${this.element} dealing ${this.power} damage!`;
+                }
+            }
+
+            class Phoenix extends Creature {
+                constructor(name) {
+                    super(name, 200);
+                    this.rebirths = 3;
+                }
+                speak() {
+                    return `🔥 ${this.name} sings a song of eternal flame!`;
+                }
+                resurrect() {
+                    if (this.rebirths > 0) {
+                        this.health = 200;
+                        this.rebirths--;
+                        return `${this.name} rises from ashes! Rebirths left: ${this.rebirths}`;
+                    }
+                    return `${this.name} cannot resurrect anymore`;
+                }
+            }
+
+            const firedragon = new Dragon('Flameheart', 'Fire', 150);
+            const phoenix = new Phoenix('Solaris');
+
+            result += `🔥 ${firedragon.speak()}\n`;
+            result += `🔥 ${firedragon.breathe()}\n`;
+            result += `✨ ${phoenix.speak()}\n`;
+            result += `✨ ${phoenix.takeDamage(250)}\n`;
+            result += `✨ ${phoenix.resurrect()}\n`;
+
+            output.textContent = result;
+            output.style.display = 'block';
+        }
+
+        // Create enhanced kometen
+        function createKometen() {
+            kometen = [];
+            
+            // Create different types of comets
+            for (let i = 0; i < 6; i++) {
+                kometen.push(new SpaceComet());
+            }
+
+            // Draw initial state
+            drawKometen();
+        }
+
+        function drawKometen() {
+            setupCanvasBackground();
+            
+            kometen.forEach(komet => {
+                komet.draw(ctx);
+            });
+        }
+
+        function startAnimation() {
+            if (animationId) return;
+            
+            function animate() {
+                // Fade effect instead of complete clear
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Add twinkling stars
+                if (Math.random() > 0.95) {
+                    ctx.fillStyle = '#FFF';
+                    ctx.beginPath();
+                    ctx.arc(
+                        Math.random() * canvas.width,
+                        Math.random() * canvas.height,
+                        Math.random() * 1.5,
+                        0, Math.PI * 2
+                    );
+                    ctx.fill();
+                }
+
+                // Update and draw comets
+                kometen.forEach(komet => {
+                    komet.move();
+                    komet.draw(ctx);
+                });
+
+                animationId = requestAnimationFrame(animate);
+            }
+            
+            animate();
+        }
+
+        function stopAnimation() {
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+            }
+        }
+
+        // Create enhanced balls
+        function createBallen() {
+            clearBallen();
+            ballen = [];
+            const svg = document.getElementById('balSvg');
+            
+            const ballConfigs = [
+                {diameter: 40, x: 80, y: 80},
+                {diameter: 60, x: 200, y: 120},
+                {diameter: 35, x: 350, y: 90},
+                {diameter: 50, x: 120, y: 200},
+                {diameter: 45, x: 280, y: 220},
+                {diameter: 55, x: 400, y: 180},
+                {diameter: 30, x: 420, y: 120},
+                {diameter: 65, x: 150, y: 250}
+            ];
+            
+            ballConfigs.forEach(config => {
+                const bal = new InteractiveBall(config.diameter, config.x, config.y);
+                ballen.push(bal);
+                bal.draw(svg);
+            });
+        }
+
+        function clearBallen() {
+            const svg = document.getElementById('balSvg');
+            const balls = svg.querySelectorAll('.interactive-ball');
+            balls.forEach(ball => ball.remove());
+            ballen = [];
+            
+            const output = document.getElementById('balOutput');
+            output.style.display = 'none';
+        }
+
+        function showBalInfo() {
+            const output = document.getElementById('balOutput');
+            let result = '';
+            
+            if (ballen.length === 0) {
+                result = '⚠️ No balls found! Click "Generate Balls" first!';
+            } else {
+                result = '🎱 Interactive Ball Statistics:\n\n';
+                ballen.forEach((bal, index) => {
+                    result += `${index + 1}. ${bal.getInfo()}\n`;
+                });
+                
+                const totalDiameter = ballen.reduce((sum, bal) => sum + bal.diameter, 0);
+                const avgDiameter = (totalDiameter / ballen.length).toFixed(1);
+                const maxDiameter = Math.max(...ballen.map(bal => bal.diameter));
+                const minDiameter = Math.min(...ballen.map(bal => bal.diameter));
+                
+                result += `\n📊 Summary:`;
+                result += `\n• Total balls: ${ballen.length}`;
+                result += `\n• Average diameter: ${avgDiameter}px`;
+                result += `\n• Largest ball: ${maxDiameter}px`;
+                result += `\n• Smallest ball: ${minDiameter}px`;
+                result += `\n• Total area coverage: ${(totalDiameter * Math.PI / 4).toFixed(0)}px²`;
+            }
+            
+            output.textContent = result;
+            output.style.display = 'block';
+        }
+
+        // Advanced concepts demonstration
+        function demonstrateAdvanced() {
+            const output = document.getElementById('advancedOutput');
+            let result = '';
+
+            result += `🧠 Advanced JavaScript Wizardry:\n\n`;
+
+            // Context manipulation
+            function spellCaster(spell, power, target = 'enemy') {
+                return `✨ ${this.name} casts ${spell} (${power} power) on ${target}!`;
+            }
+
+            const wizard = { name: '🧙‍♂️ Gandalf', mana: 100 };
+            const witch = { name: '🧙‍♀️ Hermione', mana: 150 };
+
+            result += `🔮 Context Manipulation:\n`;
+            result += `call(): ${spellCaster.call(wizard, 'Fireball', 'Maximum', 'dragon')}\n`;
+            result += `apply(): ${spellCaster.apply(witch, ['Levitation', 'Moderate', 'object'])}\n`;
+            
+            const boundSpell = spellCaster.bind(wizard, 'Lightning Bolt');
+            result += `bind(): ${boundSpell('Epic', 'dark forces')}\n\n`;
+
+            // Prototype chain magic
+            function MagicalBeing() {}
+            MagicalBeing.prototype.castSpell = function() {
+                return `${this.name} channels magical energy!`;
+            };
+
+            function Wizard(name, school) {
+                this.name = name;
+                this.school = school;
+            }
+            Wizard.prototype = Object.create(MagicalBeing.prototype);
+            Wizard.prototype.constructor = Wizard;
+            Wizard.prototype.study = function() {
+                return `${this.name} studies ${this.school} magic!`;
+            };
+
+            const merlin = new Wizard('Merlin', 'Transmutation');
+            result += `🔗 Prototype Chain:\n`;
+            result += `${merlin.castSpell()}\n`;
+            result += `${merlin.study()}\n`;
+            result += `Is instance of Wizard: ${merlin instanceof Wizard}\n`;
+            result += `Is instance of MagicalBeing: ${merlin instanceof MagicalBeing}\n`;
+
+            output.textContent = result;
+            output.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

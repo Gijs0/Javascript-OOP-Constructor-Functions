@@ -1,0 +1,1588 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript OOP Complete Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 60px 40px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .header:hover {
+            transform: translateY(-2px);
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #6c757d;
+            font-weight: 400;
+        }
+
+        .section {
+            background: white;
+            margin-bottom: 40px;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .section:nth-child(2) { animation-delay: 0.1s; }
+        .section:nth-child(3) { animation-delay: 0.2s; }
+        .section:nth-child(4) { animation-delay: 0.3s; }
+        .section:nth-child(5) { animation-delay: 0.4s; }
+        .section:nth-child(6) { animation-delay: 0.5s; }
+        .section:nth-child(7) { animation-delay: 0.6s; }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .section h2 {
+            color: #2c3e50;
+            font-size: 2rem;
+            margin-bottom: 25px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e9ecef;
+            font-weight: 600;
+        }
+
+        .section h3 {
+            color: #495057;
+            font-size: 1.4rem;
+            margin: 25px 0 15px 0;
+            font-weight: 600;
+        }
+
+        .section p {
+            font-size: 1rem;
+            margin-bottom: 20px;
+            color: #6c757d;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            border-radius: 8px;
+            padding: 24px;
+            margin: 20px 0;
+            font-family: 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .code-block:hover {
+            transform: scale(1.01);
+            box-shadow: 0 4px 20px rgba(45, 55, 72, 0.3);
+        }
+
+        .code-block::before {
+            content: 'JS';
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            background: #4a5568;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .output {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-left: 4px solid #28a745;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 15px 0;
+            font-family: 'SF Mono', monospace;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .output:hover {
+            background: #f1f3f4;
+            border-left-color: #20c997;
+        }
+
+        .output::before {
+            content: '💻 Output:';
+            font-weight: 600;
+            color: #28a745;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .button {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            margin: 8px 4px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .button:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+        }
+
+        .button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3);
+        }
+
+        .canvas-container {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+
+        canvas {
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            background: #000;
+            transition: all 0.3s ease;
+        }
+
+        canvas:hover {
+            border-color: #adb5bd;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        svg {
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: all 0.3s ease;
+        }
+
+        svg:hover {
+            border-color: #adb5bd;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .rule-box {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-left: 4px solid #ffc107;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .rule-box h4 {
+            color: #856404;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .rule-box ol {
+            color: #856404;
+            padding-left: 20px;
+        }
+
+        .rule-box li {
+            margin: 8px 0;
+        }
+
+        .example-box {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-left: 4px solid #17a2b8;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .example-box p {
+            color: #0c5460;
+            margin: 0;
+        }
+
+        /* Smooth scrolling animations */
+        .section {
+            scroll-margin-top: 20px;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .section {
+                padding: 25px;
+            }
+            
+            .code-block {
+                padding: 20px;
+                font-size: 13px;
+            }
+        }
+
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #6c757d;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>JavaScript OOP Masterclass</h1>
+            <p>Object-Oriented Programming van basis tot gevorderd</p>
+        </div>
+
+        <!-- Section 1: 'this' keyword -->
+        <div class="section">
+            <h2>1. Het 'this' Keyword</h2>
+            <p>Het 'this' keyword is een van de meest verwarrende aspecten van JavaScript. De waarde van 'this' hangt af van <strong>hoe</strong> een functie wordt aangeroepen, niet waar deze wordt gedefinieerd.</p>
+            
+            <div class="rule-box">
+                <h4>De 4 Gouden Regels voor 'this':</h4>
+                <ol>
+                    <li><strong>Method call:</strong> obj.method() → this wijst naar obj</li>
+                    <li><strong>Function call:</strong> function() → this wijst naar window/global</li>
+                    <li><strong>Constructor call:</strong> new Function() → this wijst naar nieuw object</li>
+                    <li><strong>Arrow functions:</strong> Gebruiken 'this' van de outer scope (lexical)</li>
+                </ol>
+            </div>
+
+            <h3>Praktijkvoorbeelden:</h3>
+            
+            <div class="code-block">
+// Voorbeeld 1: Method call
+const calculator = {
+    a: 10,
+    b: 5,
+    add: function() {
+        return this.a + this.b; // this = calculator
+    },
+    addArrow: () => {
+        return this.a + this.b; // this = window (niet calculator!)
+    }
+};
+
+console.log(calculator.add());      // 15
+console.log(calculator.addArrow()); // undefined + undefined = NaN
+
+// Voorbeeld 2: Constructor call
+function Person(name) {
+    this.name = name; // this = nieuw Person object
+    this.greet = function() {
+        return `Hallo, ik ben ${this.name}`;
+    };
+}
+
+const jan = new Person('Jan');
+console.log(jan.greet()); // "Hallo, ik ben Jan"
+
+// Voorbeeld 3: call, apply, bind
+function introduce(greeting, punctuation) {
+    return `${greeting}, ik ben ${this.name}${punctuation}`;
+}
+
+const person = { name: 'Alice' };
+console.log(introduce.call(person, 'Hoi', '!'));     // "Hoi, ik ben Alice!"
+console.log(introduce.apply(person, ['Hey', '?']));  // "Hey, ik ben Alice?"
+
+const boundIntro = introduce.bind(person);
+console.log(boundIntro('Hallo', '.'));              // "Hallo, ik ben Alice."
+            </div>
+
+            <button class="button" onclick="testThis()">Test 'this' Voorbeelden</button>
+            <div id="thisOutput" class="output" style="display:none;"></div>
+        </div>
+
+        <!-- Section 2: Object Creation -->
+        <div class="section">
+            <h2>2. Objecten Maken in JavaScript</h2>
+            <p>Er zijn verschillende manieren om objecten te maken in JavaScript. Elke methode heeft zijn eigen voor- en nadelen.</p>
+
+            <h3>Methode 1: Object Literals</h3>
+            <p>De eenvoudigste manier om een object te maken.</p>
+            <div class="code-block">
+const persoon = {
+    naam: "Jan Jansen",
+    leeftijd: 30,
+    stad: "Amsterdam",
+    
+    stelVoor: function() {
+        return `Hallo, ik ben ${this.naam} en ik ben ${this.leeftijd} jaar oud.`;
+    },
+    
+    verjaardagVieren: function() {
+        this.leeftijd++;
+        return `Gefeliciteerd! Je bent nu ${this.leeftijd} jaar oud.`;
+    }
+};
+
+console.log(persoon.stelVoor());
+console.log(persoon.verjaardagVieren());
+            </div>
+
+            <h3>Methode 2: Constructor Functions</h3>
+            <p>Voor het maken van meerdere vergelijkbare objecten.</p>
+            <div class="code-block">
+function Auto(merk, model, jaar) {
+    this.merk = merk;
+    this.model = model;
+    this.jaar = jaar;
+    this.kmStand = 0;
+    
+    this.rijd = function(km) {
+        this.kmStand += km;
+        return `Je hebt ${km} km gereden. Totaal: ${this.kmStand} km`;
+    };
+}
+
+// Methoden aan prototype toevoegen (efficiënter)
+Auto.prototype.getInfo = function() {
+    return `${this.merk} ${this.model} (${this.jaar}) - ${this.kmStand} km`;
+};
+
+const auto1 = new Auto("Toyota", "Corolla", 2020);
+const auto2 = new Auto("BMW", "X3", 2021);
+
+console.log(auto1.rijd(100));
+console.log(auto1.getInfo());
+            </div>
+
+            <h3>Methode 3: Object.create()</h3>
+            <p>Maakt een object met een specifiek prototype.</p>
+            <div class="code-block">
+const dierPrototype = {
+    maakGeluid: function() {
+        return `${this.naam} maakt geluid: ${this.geluid}`;
+    },
+    
+    slaap: function() {
+        return `${this.naam} gaat slapen...`;
+    }
+};
+
+const hond = Object.create(dierPrototype);
+hond.naam = "Buddy";
+hond.geluid = "Woef!";
+hond.ras = "Golden Retriever";
+
+console.log(hond.maakGeluid());
+console.log(hond.slaap());
+            </div>
+
+            <h3>Methode 4: ES6 Classes</h3>
+            <p>Moderne, leesbare syntax voor object-georiënteerd programmeren.</p>
+            <div class="code-block">
+class Smartphone {
+    constructor(merk, model, opslag) {
+        this.merk = merk;
+        this.model = model;
+        this.opslag = opslag;
+        this.batterijtLevel = 100;
+        this.apps = [];
+    }
+    
+    installeerApp(appNaam) {
+        this.apps.push(appNaam);
+        return `${appNaam} is geïnstalleerd!`;
+    }
+    
+    gebruikBatterij(percentage) {
+        this.batterijtLevel = Math.max(0, this.batterijtLevel - percentage);
+        return `Batterij: ${this.batterijtLevel}%`;
+    }
+    
+    getSpecs() {
+        return `${this.merk} ${this.model} - ${this.opslag}GB, ${this.apps.length} apps`;
+    }
+}
+
+const iPhone = new Smartphone("Apple", "iPhone 14", 128);
+console.log(iPhone.installeerApp("WhatsApp"));
+console.log(iPhone.gebruikBatterij(20));
+console.log(iPhone.getSpecs());
+            </div>
+
+            <button class="button" onclick="testObjectCreation()">Test Object Creation</button>
+            <div id="objectOutput" class="output" style="display:none;"></div>
+        </div>
+
+        <!-- Section 3: Inheritance -->
+        <div class="section">
+            <h2>3. Inheritance (Overerving)</h2>
+            <p>Inheritance stelt ons in staat om eigenschappen en methoden van een parent class over te nemen in een child class.</p>
+
+            <h3>Prototype-based Inheritance</h3>
+            <div class="code-block">
+// Parent constructor
+function Voertuig(merk, jaar) {
+    this.merk = merk;
+    this.jaar = jaar;
+    this.snelheid = 0;
+}
+
+Voertuig.prototype.start = function() {
+    return `${this.merk} is gestart!`;
+};
+
+Voertuig.prototype.versnel = function(kmh) {
+    this.snelheid += kmh;
+    return `Huidige snelheid: ${this.snelheid} km/h`;
+};
+
+// Child constructor
+function Auto(merk, jaar, deuren) {
+    Voertuig.call(this, merk, jaar); // Parent constructor aanroepen
+    this.deuren = deuren;
+}
+
+// Inheritance instellen
+Auto.prototype = Object.create(Voertuig.prototype);
+Auto.prototype.constructor = Auto;
+
+// Nieuwe methode toevoegen
+Auto.prototype.claxonneer = function() {
+    return "Toeteren! BEEP BEEP!";
+};
+
+// Methode overschrijven
+Auto.prototype.start = function() {
+    return `${this.merk} auto start met een ronkend geluid!`;
+};
+
+const mijnAuto = new Auto("Ford", 2022, 4);
+console.log(mijnAuto.start());
+console.log(mijnAuto.versnel(50));
+console.log(mijnAuto.claxonneer());
+            </div>
+
+            <h3>ES6 Class Inheritance</h3>
+            <div class="code-block">
+class Dier {
+    constructor(naam, soort) {
+        this.naam = naam;
+        this.soort = soort;
+        this.energie = 100;
+    }
+    
+    eet(voedsel) {
+        this.energie = Math.min(100, this.energie + 20);
+        return `${this.naam} eet ${voedsel}. Energie: ${this.energie}`;
+    }
+    
+    slaap() {
+        this.energie = 100;
+        return `${this.naam} heeft geslapen en is uitgerust!`;
+    }
+    
+    maakGeluid() {
+        return `${this.naam} maakt een geluid...`;
+    }
+}
+
+class Hond extends Dier {
+    constructor(naam, ras) {
+        super(naam, "hond"); // Parent constructor aanroepen
+        this.ras = ras;
+        this.speeltjes = [];
+    }
+    
+    // Methode overschrijven
+    maakGeluid() {
+        return `${this.naam} blaft: Woef woef!`;
+    }
+    
+    // Nieuwe methode
+    speel(speeltje) {
+        this.energie -= 10;
+        this.speeltjes.push(speeltje);
+        return `${this.naam} speelt met ${speeltje}. Energie: ${this.energie}`;
+    }
+    
+    haalStok() {
+        return `${this.naam} haalt de stok en brengt hem terug!`;
+    }
+}
+
+class Kat extends Dier {
+    constructor(naam, kleur) {
+        super(naam, "kat");
+        this.kleur = kleur;
+        this.levens = 9;
+    }
+    
+    maakGeluid() {
+        return `${this.naam} miauwt: Miauw!`;
+    }
+    
+    klim() {
+        this.energie -= 5;
+        return `${this.naam} klimt behendig omhoog!`;
+    }
+    
+    spin() {
+        return `${this.naam} spint tevreden: prrrrr...`;
+    }
+}
+
+const rex = new Hond("Rex", "Duitse Herder");
+const whiskers = new Kat("Whiskers", "zwart");
+
+console.log(rex.maakGeluid());
+console.log(rex.speel("bal"));
+console.log(whiskers.maakGeluid());
+console.log(whiskers.spin());
+            </div>
+
+            <button class="button" onclick="testInheritance()">Test Inheritance</button>
+            <div id="inheritanceOutput" class="output" style="display:none;"></div>
+        </div>
+
+        <!-- Section 4: Komeet Assignment -->
+        <div class="section">
+            <h2>4. Opdracht: Komeet Simulator</h2>
+            <p>Maak een komeet simulator voor een space game! We implementeren dit op drie verschillende manieren.</p>
+
+            <h3>Versie 1: Object.create() Method</h3>
+            <div class="code-block">
+const komeetPrototype = {
+    // Helper functie voor random getallen
+    rnd: (max) => Math.round(Math.random() * max),
+    
+    // Bereken de snelheid op basis van vector
+    getSnelheid: function() {
+        return Math.sqrt(this.vector[0]**2 + this.vector[1]**2).toFixed(1);
+    },
+    
+    // Update positie
+    beweeg: function() {
+        this.x += this.vector[0];
+        this.y += this.vector[1];
+        
+        // Wrap around screen
+        if (this.x < 0) this.x = 500;
+        if (this.x > 500) this.x = 0;
+        if (this.y < 0) this.y = 400;
+        if (this.y > 400) this.y = 0;
+    }
+};
+
+function maakKomeet() {
+    const komeet = Object.create(komeetPrototype);
+    komeet.diameter = komeetPrototype.rnd(80) + 20;
+    komeet.snelheid = komeetPrototype.rnd(100) + 10;
+    komeet.x = komeetPrototype.rnd(450);
+    komeet.y = komeetPrototype.rnd(350);
+    komeet.vector = [
+        komeetPrototype.rnd(6) - 3, 
+        komeetPrototype.rnd(6) - 3
+    ];
+    komeet.kleur = `hsl(${komeetPrototype.rnd(60) + 15}, 90%, 60%)`;
+    return komeet;
+}
+            </div>
+
+            <h3>Versie 2: Constructor Function</h3>
+            <div class="code-block">
+function KomeetConstructor() {
+    this.diameter = Math.round(Math.random() * 80) + 20;
+    this.snelheid = Math.round(Math.random() * 100) + 10;
+    this.x = Math.round(Math.random() * 450);
+    this.y = Math.round(Math.random() * 350);
+    this.vector = [
+        Math.round(Math.random() * 6) - 3,
+        Math.round(Math.random() * 6) - 3
+    ];
+    this.kleur = this.generateColor();
+    this.trail = [];
+}
+
+KomeetConstructor.prototype.generateColor = function() {
+    const colors = ['#FFD700', '#FF8C42', '#FF6B47', '#4ECDC4', '#45B7D1'];
+    return colors[Math.floor(Math.random() * colors.length)];
+};
+
+KomeetConstructor.prototype.beweeg = function() {
+    // Voeg huidige positie toe aan trail
+    this.trail.unshift({x: this.x, y: this.y});
+    if (this.trail.length > 5) this.trail.pop();
+    
+    this.x += this.vector[0];
+    this.y += this.vector[1];
+    
+    // Screen wrapping
+    if (this.x < -this.diameter) this.x = 500 + this.diameter;
+    if (this.x > 500 + this.diameter) this.x = -this.diameter;
+    if (this.y < -this.diameter) this.y = 400 + this.diameter;
+    if (this.y > 400 + this.diameter) this.y = -this.diameter;
+};
+            </div>
+
+            <h3>Versie 3: ES6 Class</h3>
+            <div class="code-block">
+class Komeet {
+    constructor() {
+        this.diameter = Math.round(Math.random() * 80) + 20;
+        this.snelheid = Math.round(Math.random() * 100) + 10;
+        this.x = Math.round(Math.random() * 450);
+        this.y = Math.round(Math.random() * 350);
+        this.vector = [
+            Math.round(Math.random() * 6) - 3,
+            Math.round(Math.random() * 6) - 3
+        ];
+        this.kleur = this.generateRandomColor();
+        this.trail = [];
+        this.particles = [];
+        this.rotatie = 0;
+    }
+    
+    generateRandomColor() {
+        // Mooie komeet kleuren
+        const hue = Math.random() * 60 + 15; // Oranje tot geel spectrum
+        const saturation = 80 + Math.random() * 20;
+        const lightness = 50 + Math.random() * 30;
+        return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+    }
+    
+    beweeg() {
+        // Trail effect
+        this.trail.unshift({x: this.x, y: this.y, alpha: 1});
+        if (this.trail.length > 8) this.trail.pop();
+        
+        // Particle effects
+        if (Math.random() < 0.4) {
+            this.particles.push({
+                x: this.x + (Math.random() - 0.5) * this.diameter,
+                y: this.y + (Math.random() - 0.5) * this.diameter,
+                vx: (Math.random() - 0.5) * 2,
+                vy: (Math.random() - 0.5) * 2,
+                life: 30,
+                maxLife: 30
+            });
+        }
+        
+        // Update particles
+        this.particles = this.particles.filter(particle => {
+            particle.x += particle.vx;
+            particle.y += particle.vy;
+            particle.life--;
+            return particle.life > 0;
+        });
+        
+        // Update positie
+        this.x += this.vector[0];
+        this.y += this.vector[1];
+        this.rotatie += 0.05;
+        
+        // Screen wrapping
+        if (this.x < -this.diameter) this.x = 500 + this.diameter;
+        if (this.x > 500 + this.diameter) this.x = -this.diameter;
+        if (this.y < -this.diameter) this.y = 400 + this.diameter;
+        if (this.y > 400 + this.diameter) this.y = -this.diameter;
+    }
+    
+    draw(ctx) {
+        // Teken trail
+        this.trail.forEach((point, index) => {
+            const alpha = (this.trail.length - index) / this.trail.length * 0.6;
+            const size = (this.trail.length - index) / this.trail.length * this.diameter * 0.4;
+            
+            ctx.globalAlpha = alpha;
+            ctx.fillStyle = this.kleur;
+            ctx.beginPath();
+            ctx.arc(point.x, point.y, size, 0, Math.PI * 2);
+            ctx.fill();
+        });
+        
+        // Teken particles
+        this.particles.forEach(particle => {
+            const alpha = particle.life / particle.maxLife;
+            ctx.globalAlpha = alpha * 0.8;
+            ctx.fillStyle = '#FFFFFF';
+            ctx.beginPath();
+            ctx.arc(particle.x, particle.y, 1.5, 0, Math.PI * 2);
+            ctx.fill();
+        });
+        
+        ctx.globalAlpha = 1;
+        
+        // Hoofdkomeet met gradient
+        const gradient = ctx.createRadialGradient(
+            this.x - this.diameter * 0.3, 
+            this.y - this.diameter * 0.3, 
+            0,
+            this.x, 
+            this.y, 
+            this.diameter / 2
+        );
+        gradient.addColorStop(0, '#FFFFFF');
+        gradient.addColorStop(0.4, this.kleur);
+        gradient.addColorStop(1, '#FF4500');
+        
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.diameter / 2, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Glow effect
+        ctx.shadowColor = this.kleur;
+        ctx.shadowBlur = 20;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.diameter / 2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+    }
+    
+    getInfo() {
+        return {
+            diameter: this.diameter,
+            snelheid: this.snelheid,
+            x: Math.round(this.x),
+            y: Math.round(this.y),
+            vector: this.vector,
+            kleur: this.kleur
+        };
+    }
+}
+            </div>
+
+            <div class="canvas-container">
+                <canvas id="komeetCanvas" width="500" height="400"></canvas>
+                <br>
+                <button class="button" onclick="createKometen()">Maak Kometen</button>
+                <button class="button" onclick="startKomeetAnimatie()">Start Animatie</button>
+                <button class="button" onclick="stopKomeetAnimatie()">Stop Animatie</button>
+                <button class="button" onclick="showKomeetInfo()">Toon Info</button>
+            </div>
+            <div id="komeetOutput" class="output" style="display:none;"></div>
+        </div>
+
+        <!-- Section 5: Ball Assignment -->
+        <div class="section">
+            <h2>5. Opdracht: Interactive Ball Class</h2>
+            <p>Maak een Ball class die tekent met SVG en interactieve effecten heeft.</p>
+
+            <div class="code-block">
+class Bal {
+    constructor(diameter, x, y) {
+        this.diameter = diameter;
+        this.x = x;
+        this.y = y;
+        this.kleur = this.generateColor();
+        this.id = Math.random().toString(36).substr(2, 9);
+    }
+    
+    generateColor() {
+        const colors = [
+            '#E74C3C', '#3498DB', '#2ECC71', '#F39C12', 
+            '#9B59B6', '#1ABC9C', '#E67E22', '#34495E'
+        ];
+        return colors[Math.floor(Math.random() * colors.length)];
+    }
+    
+    draw(svgElement) {
+        // Maak SVG circle element
+        const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        circle.setAttribute("cx", this.x);
+        circle.setAttribute("cy", this.y);
+        circle.setAttribute("r", this.diameter / 2);
+        circle.setAttribute("fill", this.kleur);
+        circle.setAttribute("stroke", "#2C3E50");
+        circle.setAttribute("stroke-width", "2");
+        circle.setAttribute("class", "interactive-bal");
+        circle.setAttribute("data-id", this.id);
+        
+        // CSS voor smooth transitions
+        circle.style.transition = "all 0.3s ease";
+        circle.style.cursor = "pointer";
+        
+        // Event listeners voor interactiviteit
+        circle.addEventListener("mouseenter", () => {
+            circle.setAttribute("transform", `scale(1.1)`);
+            circle.setAttribute("transform-origin", `${this.x} ${this.y}`);
+            circle.setAttribute("stroke-width", "4");
+        });
+        
+        circle.addEventListener("mouseleave", () => {
+            circle.setAttribute("transform", "scale(1)");
+            circle.setAttribute("stroke-width", "2");
+        });
+        
+        circle.addEventListener("click", () => {
+            this.bounce(circle);
+        });
+        
+        svgElement.appendChild(circle);
+        return circle;
+    }
+    
+    bounce(element) {
+        // Bounce animatie
+        element.setAttribute("transform", `scale(0.8)`);
+        element.setAttribute("transform-origin", `${this.x} ${this.y}`);
+        
+        setTimeout(() => {
+            element.setAttribute("transform", "scale(1.2)");
+            setTimeout(() => {
+                element.setAttribute("transform", "scale(1)");
+            }, 150);
+        }, 100);
+        
+        // Verander kleur bij klik
+        this.kleur = this.generateColor();
+        element.setAttribute("fill", this.kleur);
+    }
+    
+    getInfo() {
+        return `Bal: ${this.diameter}px diameter op positie (${this.x}, ${this.y}) met kleur ${this.kleur}`;
+    }
+}
+
+// Voorbeeld gebruik:
+// const bal1 = new Bal(50, 100, 100);
+// const bal2 = new Bal(80, 250, 150);
+// const svg = document.getElementById('balSvg');
+// bal1.draw(svg);
+// bal2.draw(svg);
+            </div>
+
+            <div class="canvas-container">
+                <svg id="balSvg" width="500" height="300">
+                    <!-- Grid achtergrond -->
+                    <defs>
+                        <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+                            <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#E5E5E5" stroke-width="1" opacity="0.5"/>
+                        </pattern>
+                    </defs>
+                    <rect width="100%" height="100%" fill="url(#grid)" />
+                </svg>
+                <br>
+                <button class="button" onclick="createBallen()">Maak Ballen</button>
+                <button class="button" onclick="clearBallen()">Wis Ballen</button>
+                <button class="button" onclick="showBallenInfo()">Toon Info</button>
+            </div>
+            <div id="ballenOutput" class="output" style="display:none;"></div>
+        </div>
+
+        <!-- Section 6: Advanced Concepts -->
+        <div class="section">
+            <h2>6. Geavanceerde Concepten</h2>
+            
+            <div class="example-box">
+                <p><strong>Prototype Chain:</strong> Elk object in JavaScript heeft een prototype. Als je een property of method opvraagt die niet bestaat op het object zelf, zoekt JavaScript in de prototype chain.</p>
+            </div>
+
+            <h3>Function Context Manipulation</h3>
+            <div class="code-block">
+// call(), apply(), en bind() laten je de 'this' context manipuleren
+
+function berekenScore(bonus, multiplier) {
+    return `${this.naam} heeft ${(this.punten + bonus) * multiplier} punten behaald!`;
+}
+
+const speler1 = { naam: "Alice", punten: 100 };
+const speler2 = { naam: "Bob", punten: 150 };
+
+// call() - argumenten individueel
+console.log(berekenScore.call(speler1, 50, 2));
+// "Alice heeft 300 punten behaald!"
+
+// apply() - argumenten als array
+console.log(berekenScore.apply(speler2, [25, 1.5]));
+// "Bob heeft 262.5 punten behaald!"
+
+// bind() - maakt nieuwe functie met vaste context
+const aliceScore = berekenScore.bind(speler1);
+console.log(aliceScore(75, 1.8));
+// "Alice heeft 315 punten behaald!"
+            </div>
+
+            <h3>Prototype Chain Voorbeeld</h3>
+            <div class="code-block">
+// Demonstratie van prototype chain
+function Voertuig() {}
+Voertuig.prototype.start = function() {
+    return "Voertuig gestart";
+};
+
+function Auto() {}
+Auto.prototype = Object.create(Voertuig.prototype);
+Auto.prototype.constructor = Auto;
+Auto.prototype.rijd = function() {
+    return "Auto rijdt";
+};
+
+const mijnAuto = new Auto();
+
+// JavaScript zoekt in deze volgorde:
+// 1. mijnAuto object zelf
+// 2. Auto.prototype
+// 3. Voertuig.prototype
+// 4. Object.prototype
+
+console.log(mijnAuto.rijd());        // Van Auto.prototype
+console.log(mijnAuto.start());       // Van Voertuig.prototype  
+console.log(mijnAuto.toString());    // Van Object.prototype
+
+// Controleer prototype chain
+console.log(mijnAuto instanceof Auto);      // true
+console.log(mijnAuto instanceof Voertuig);  // true
+console.log(mijnAuto instanceof Object);    // true
+            </div>
+
+            <button class="button" onclick="testAdvanced()">Test Geavanceerde Concepten</button>
+            <div id="advancedOutput" class="output" style="display:none;"></div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let kometen = [];
+        let animationId = null;
+        let ballen = [];
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Setup canvas
+            const canvas = document.getElementById('komeetCanvas');
+            if (canvas) {
+                const ctx = canvas.getContext('2d');
+                // Draw initial starfield
+                drawStarfield(ctx);
+            }
+        });
+
+        // Test 'this' keyword examples
+        function testThis() {
+            const output = document.getElementById('thisOutput');
+            let result = '🔍 Testing "this" keyword:\n\n';
+
+            // Method call example
+            const obj = {
+                a: 10,
+                b: 5,
+                regularMethod: function() {
+                    return `Regular method: this.a + this.b = ${this.a + this.b}`;
+                },
+                arrowMethod: () => {
+                    return `Arrow method: this.a + this.b = ${this.a + this.b} (undefined)`;
+                }
+            };
+
+            result += obj.regularMethod() + '\n';
+            result += obj.arrowMethod() + '\n\n';
+
+            // Constructor example
+            function TestConstructor(name) {
+                this.name = name;
+                this.greet = function() {
+                    return `Constructor: Hello, I'm ${this.name}`;
+                };
+            }
+
+            const instance = new TestConstructor('JavaScript');
+            result += instance.greet() + '\n\n';
+
+            // call/apply/bind example
+            function contextTest(prefix, suffix) {
+                return `${prefix} ${this.value} ${suffix}`;
+            }
+
+            const context = { value: 'CONTEXT' };
+            result += 'call(): ' + contextTest.call(context, 'Before', 'After') + '\n';
+            result += 'apply(): ' + contextTest.apply(context, ['Start', 'End']) + '\n';
+            
+            const boundFunction = contextTest.bind(context);
+            result += 'bind(): ' + boundFunction('Bound', 'Function') + '\n';
+
+            output.textContent = result;
+            output.style.display = 'block';
+        }
+
+        // Test object creation methods
+        function testObjectCreation() {
+            const output = document.getElementById('objectOutput');
+            let result = '🏗️ Testing Object Creation Methods:\n\n';
+
+            // Object literal
+            const literal = {
+                type: 'literal',
+                greet() { return `Hello from ${this.type} object`; }
+            };
+            result += '1. Object Literal: ' + literal.greet() + '\n';
+
+            // Constructor function
+            function ConstructorObj(type) {
+                this.type = type;
+                this.greet = function() {
+                    return `Hello from ${this.type} object`;
+                };
+            }
+            const constructed = new ConstructorObj('constructor');
+            result += '2. Constructor: ' + constructed.greet() + '\n';
+
+            // Object.create
+            const proto = {
+                greet() { return `Hello from ${this.type} object`; }
+            };
+            const created = Object.create(proto);
+            created.type = 'Object.create';
+            result += '3. Object.create: ' + created.greet() + '\n';
+
+            // ES6 Class
+            class ClassObj {
+                constructor(type) {
+                    this.type = type;
+                }
+                greet() {
+                    return `Hello from ${this.type} object`;
+                }
+            }
+            const classed = new ClassObj('ES6 class');
+            result += '4. ES6 Class: ' + classed.greet() + '\n';
+
+            output.textContent = result;
+            output.style.display = 'block';
+        }
+
+        // Test inheritance
+        function testInheritance() {
+            const output = document.getElementById('inheritanceOutput');
+            let result = '🧬 Testing Inheritance:\n\n';
+
+            // ES6 Class inheritance
+            class Animal {
+                constructor(name) {
+                    this.name = name;
+                }
+                speak() {
+                    return `${this.name} makes a sound`;
+                }
+            }
+
+            class Dog extends Animal {
+                constructor(name, breed) {
+                    super(name);
+                    this.breed = breed;
+                }
+                speak() {
+                    return `${this.name} the ${this.breed} barks: Woof!`;
+                }
+            }
+
+            class Cat extends Animal {
+                speak() {
+                    return `${this.name} meows: Meow!`;
+                }
+            }
+
+            const dog = new Dog('Buddy', 'Golden Retriever');
+            const cat = new Cat('Whiskers');
+
+            result += dog.speak() + '\n';
+            result += cat.speak() + '\n\n';
+
+            // Prototype inheritance
+            function Vehicle(type) {
+                this.type = type;
+            }
+            Vehicle.prototype.start = function() {
+                return `${this.type} is starting...`;
+            };
+
+            function Car(type, brand) {
+                Vehicle.call(this, type);
+                this.brand = brand;
+            }
+            Car.prototype = Object.create(Vehicle.prototype);
+            Car.prototype.constructor = Car;
+            
+            Car.prototype.drive = function() {
+                return `${this.brand} ${this.type} is driving!`;
+            };
+
+            const car = new Car('sedan', 'Toyota');
+            result += 'Prototype inheritance:\n';
+            result += car.start() + '\n';
+            result += car.drive() + '\n';
+
+            output.textContent = result;
+            output.style.display = 'block';
+        }
+
+        // Draw starfield background
+        function drawStarfield(ctx) {
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, 500, 400);
+            
+            ctx.fillStyle = '#FFF';
+            for (let i = 0; i < 100; i++) {
+                const x = Math.random() * 500;
+                const y = Math.random() * 400;
+                const size = Math.random() * 2;
+                ctx.beginPath();
+                ctx.arc(x, y, size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        // Enhanced Komeet class with beautiful effects
+        class Komeet {
+            constructor() {
+                this.diameter = Math.round(Math.random() * 80) + 20;
+                this.snelheid = Math.round(Math.random() * 100) + 10;
+                this.x = Math.round(Math.random() * 450);
+                this.y = Math.round(Math.random() * 350);
+                this.vector = [
+                    Math.round(Math.random() * 6) - 3,
+                    Math.round(Math.random() * 6) - 3
+                ];
+                this.kleur = this.generateRandomColor();
+                this.trail = [];
+                this.particles = [];
+                this.rotatie = 0;
+            }
+            
+            generateRandomColor() {
+                const colors = [
+                    '#FFD700', '#FF8C42', '#FF6B47', '#4ECDC4', 
+                    '#45B7D1', '#A8E6CF', '#FF8E53', '#54A0FF'
+                ];
+                return colors[Math.floor(Math.random() * colors.length)];
+            }
+            
+            beweeg() {
+                // Trail effect
+                this.trail.unshift({x: this.x, y: this.y});
+                if (this.trail.length > 8) this.trail.pop();
+                
+                // Particle effects
+                if (Math.random() < 0.4) {
+                    this.particles.push({
+                        x: this.x + (Math.random() - 0.5) * this.diameter,
+                        y: this.y + (Math.random() - 0.5) * this.diameter,
+                        vx: (Math.random() - 0.5) * 2,
+                        vy: (Math.random() - 0.5) * 2,
+                        life: 30,
+                        maxLife: 30
+                    });
+                }
+                
+                // Update particles
+                this.particles = this.particles.filter(particle => {
+                    particle.x += particle.vx;
+                    particle.y += particle.vy;
+                    particle.life--;
+                    return particle.life > 0;
+                });
+                
+                // Update positie
+                this.x += this.vector[0];
+                this.y += this.vector[1];
+                this.rotatie += 0.05;
+                
+                // Screen wrapping
+                if (this.x < -this.diameter) this.x = 500 + this.diameter;
+                if (this.x > 500 + this.diameter) this.x = -this.diameter;
+                if (this.y < -this.diameter) this.y = 400 + this.diameter;
+                if (this.y > 400 + this.diameter) this.y = -this.diameter;
+            }
+            
+            draw(ctx) {
+                // Teken trail
+                this.trail.forEach((point, index) => {
+                    const alpha = (this.trail.length - index) / this.trail.length * 0.6;
+                    const size = (this.trail.length - index) / this.trail.length * this.diameter * 0.4;
+                    
+                    ctx.globalAlpha = alpha;
+                    ctx.fillStyle = this.kleur;
+                    ctx.beginPath();
+                    ctx.arc(point.x, point.y, size, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                
+                // Teken particles
+                this.particles.forEach(particle => {
+                    const alpha = particle.life / particle.maxLife;
+                    ctx.globalAlpha = alpha * 0.8;
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, 1.5, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                
+                ctx.globalAlpha = 1;
+                
+                // Hoofdkomeet met gradient
+                const gradient = ctx.createRadialGradient(
+                    this.x - this.diameter * 0.3, 
+                    this.y - this.diameter * 0.3, 
+                    0,
+                    this.x, 
+                    this.y, 
+                    this.diameter / 2
+                );
+                gradient.addColorStop(0, '#FFFFFF');
+                gradient.addColorStop(0.4, this.kleur);
+                gradient.addColorStop(1, '#FF4500');
+                
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.diameter / 2, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Glow effect
+                ctx.shadowColor = this.kleur;
+                ctx.shadowBlur = 20;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.diameter / 2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+            
+            getInfo() {
+                return {
+                    diameter: this.diameter,
+                    snelheid: this.snelheid,
+                    x: Math.round(this.x),
+                    y: Math.round(this.y),
+                    vector: this.vector,
+                    kleur: this.kleur
+                };
+            }
+        }
+
+        // Create kometen
+        function createKometen() {
+            kometen = [];
+            for (let i = 0; i < 6; i++) {
+                kometen.push(new Komeet());
+            }
+            
+            const canvas = document.getElementById('komeetCanvas');
+            const ctx = canvas.getContext('2d');
+            drawStarfield(ctx);
+            
+            kometen.forEach(komeet => {
+                komeet.draw(ctx);
+            });
+        }
+
+        // Start komeet animation
+        function startKomeetAnimatie() {
+            if (animationId || kometen.length === 0) return;
+            
+            const canvas = document.getElementById('komeetCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            function animate() {
+                // Fade effect
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+                ctx.fillRect(0, 0, 500, 400);
+                
+                // Twinkling stars
+                if (Math.random() > 0.98) {
+                    ctx.fillStyle = '#FFF';
+                    ctx.beginPath();
+                    ctx.arc(
+                        Math.random() * 500,
+                        Math.random() * 400,
+                        Math.random() * 1.5,
+                        0, Math.PI * 2
+                    );
+                    ctx.fill();
+                }
+                
+                // Update en teken kometen
+                kometen.forEach(komeet => {
+                    komeet.beweeg();
+                    komeet.draw(ctx);
+                });
+                
+                animationId = requestAnimationFrame(animate);
+            }
+            
+            animate();
+        }
+
+        // Stop komeet animation
+        function stopKomeetAnimatie() {
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+            }
+        }
+
+        // Show komeet info
+        function showKomeetInfo() {
+            const output = document.getElementById('komeetOutput');
+            if (kometen.length === 0) {
+                output.textContent = '⚠️ Geen kometen gevonden! Maak eerst kometen.';
+                output.style.display = 'block';
+                return;
+            }
+            
+            let result = '🌌 Komeet Informatie:\n\n';
+            kometen.forEach((komeet, index) => {
+                const info = komeet.getInfo();
+                result += `${index + 1}. Diameter: ${info.diameter}px, `;
+                result += `Positie: (${info.x}, ${info.y}), `;
+                result += `Vector: [${info.vector[0]}, ${info.vector[1]}], `;
+                result += `Kleur: ${info.kleur}\n`;
+            });
+            
+            output.textContent = result;
+            output.style.display = 'block';
+        }
+
+        // Ball class
+        class Bal {
+            constructor(diameter, x, y) {
+                this.diameter = diameter;
+                this.x = x;
+                this.y = y;
+                this.kleur = this.generateColor();
+                this.id = Math.random().toString(36).substr(2, 9);
+            }
+            
+            generateColor() {
+                const colors = [
+                    '#E74C3C', '#3498DB', '#2ECC71', '#F39C12', 
+                    '#9B59B6', '#1ABC9C', '#E67E22', '#34495E'
+                ];
+                return colors[Math.floor(Math.random() * colors.length)];
+            }
+            
+            draw(svgElement) {
+                const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                circle.setAttribute("cx", this.x);
+                circle.setAttribute("cy", this.y);
+                circle.setAttribute("r", this.diameter / 2);
+                circle.setAttribute("fill", this.kleur);
+                circle.setAttribute("stroke", "#2C3E50");
+                circle.setAttribute("stroke-width", "2");
+                circle.setAttribute("class", "interactive-bal");
+                circle.setAttribute("data-id", this.id);
+                
+                circle.style.transition = "all 0.3s ease";
+                circle.style.cursor = "pointer";
+                
+                circle.addEventListener("mouseenter", () => {
+                    circle.setAttribute("transform", `scale(1.1)`);
+                    circle.setAttribute("transform-origin", `${this.x} ${this.y}`);
+                    circle.setAttribute("stroke-width", "4");
+                });
+                
+                circle.addEventListener("mouseleave", () => {
+                    circle.setAttribute("transform", "scale(1)");
+                    circle.setAttribute("stroke-width", "2");
+                });
+                
+                circle.addEventListener("click", () => {
+                    this.bounce(circle);
+                });
+                
+                svgElement.appendChild(circle);
+                return circle;
+            }
+            
+            bounce(element) {
+                element.setAttribute("transform", `scale(0.8)`);
+                element.setAttribute("transform-origin", `${this.x} ${this.y}`);
+                
+                setTimeout(() => {
+                    element.setAttribute("transform", "scale(1.2)");
+                    setTimeout(() => {
+                        element.setAttribute("transform", "scale(1)");
+                    }, 150);
+                }, 100);
+                
+                this.kleur = this.generateColor();
+                element.setAttribute("fill", this.kleur);
+            }
+            
+            getInfo() {
+                return `Bal: ${this.diameter}px diameter op (${this.x}, ${this.y}) - ${this.kleur}`;
+            }
+        }
+
+        // Create ballen
+        function createBallen() {
+            clearBallen();
+            ballen = [];
+            const svg = document.getElementById('balSvg');
+            
+            const configurations = [
+                {diameter: 40, x: 80, y: 80},
+                {diameter: 60, x: 180, y: 120},
+                {diameter: 35, x: 320, y: 90},
+                {diameter: 50, x: 120, y: 200},
+                {diameter: 45, x: 280, y: 220},
+                {diameter: 55, x: 400, y: 180}
+            ];
+            
+            configurations.forEach(config => {
+                const bal = new Bal(config.diameter, config.x, config.y);
+                ballen.push(bal);
+                bal.draw(svg);
+            });
+        }
+
+        // Clear ballen
+        function clearBallen() {
+            const svg = document.getElementById('balSvg');
+            const circles = svg.querySelectorAll('.interactive-bal');
+            circles.forEach(circle => circle.remove());
+            ballen = [];
+            
+            const output = document.getElementById('ballenOutput');
+            output.style.display = 'none';
+        }
+
+        // Show ballen info
+        function showBallenInfo() {
+            const output = document.getElementById('ballenOutput');
+            if (ballen.length === 0) {
+                output.textContent = '⚠️ Geen ballen gevonden! Maak eerst ballen.';
+                output.style.display = 'block';
+                return;
+            }
+            
+            let result = '⚽ Ballen Informatie:\n\n';
+            ballen.forEach((bal, index) => {
+                result += `${index + 1}. ${bal.getInfo()}\n`;
+            });
+            
+            const totalDiameter = ballen.reduce((sum, bal) => sum + bal.diameter, 0);
+            const avgDiameter = (totalDiameter / ballen.length).toFixed(1);
+            
+            result += `\n📊 Statistieken:`;
+            result += `\nTotaal aantal: ${ballen.length}`;
+            result += `\nGemiddelde diameter: ${avgDiameter}px`;
+            result += `\nTotale oppervlakte: ${Math.round(ballen.reduce((sum, bal) => sum + Math.PI * (bal.diameter/2)**2, 0))}px²`;
+            
+            output.textContent = result;
+            output.style.display = 'block';
+        }
+
+        // Test advanced concepts
+        function testAdvanced() {
+            const output = document.getElementById('advancedOutput');
+            let result = '🧠 Geavanceerde Concepten:\n\n';
+
+            // Context manipulation
+            function testFunction(prefix, suffix) {
+                return `${prefix} ${this.value} ${suffix}`;
+            }
+
+            const context1 = { value: 'ADVANCED' };
+            const context2 = { value: 'JAVASCRIPT' };
+
+            result += '🔧 Context Manipulation:\n';
+            result += 'call(): ' + testFunction.call(context1, 'Testing', 'Concepts') + '\n';
+            result += 'apply(): ' + testFunction.apply(context2, ['Learning', 'Programming']) + '\n';
+            
+            const boundFn = testFunction.bind(context1, 'Bound');
+            result += 'bind(): ' + boundFn('Function') + '\n\n';
+
+            // Prototype chain
+            function Parent() {}
+            Parent.prototype.parentMethod = function() {
+                return 'From parent prototype';
+            };
+
+            function Child() {}
+            Child.prototype = Object.create(Parent.prototype);
+            Child.prototype.constructor = Child;
+            Child.prototype.childMethod = function() {
+                return 'From child prototype';
+            };
+
+            const instance = new Child();
+            result += '🔗 Prototype Chain:\n';
+            result += 'Child method: ' + instance.childMethod() + '\n';
+            result += 'Parent method: ' + instance.parentMethod() + '\n';
+            result += 'instanceof Child: ' + (instance instanceof Child) + '\n';
+            result += 'instanceof Parent: ' + (instance instanceof Parent) + '\n';
+
+            output.textContent = result;
+            output.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
